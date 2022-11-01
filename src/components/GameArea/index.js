@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useContext} from "react";
 
 export const GameArea = props => {
   const {
@@ -6,18 +6,30 @@ export const GameArea = props => {
     w,
     h
   } = props
-
+  
+  const renderChildren = () => {
+    if (typeof children === "function") {
+      //console.log('Children Func')
+      return children({
+        size: { w, h }
+      })
+    } else {
+      //console.log('Children Classic')
+      return children
+    }
+  }
+  
   return (
     <div
       style={{
         position: 'relative',
-        height: '100vh',
-        width: '100vw',
-        borderWidth: '1px'
+        height: h,
+        width: w,
+        borderWidth: '1px',
       }}
     >
       {
-        children
+        renderChildren()
       }
     </div>
   )
