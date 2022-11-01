@@ -5,26 +5,20 @@ export const GameContext = createContext()
 const GameContextProvider = ({ children }) => {
   const [keysPressed, setKeyPressed] = useState(null)
   const [event, setEvent] = useState(null)
+  const [tick, setTick] = useState(0)
   
   useEffect(() => {
     document.addEventListener('keydown', (event) => {
-      let keyValue = event.key;
       let codeValue = event.code;
       setEvent(event)
-      // console.log("keyValue: " + keyValue);
-      //  console.log("PRESS: " + codeValue);
-      
       setKeyPressed(codeValue)
+      setTick(tick + 1)
     }, false);
   
     document.addEventListener('keyup', (event) => {
-      let keyValue = event.key;
-      let codeValue = event.code;
       setEvent(null)
-      // console.log("keyValue: " + keyValue);
-      //  console.log("UP: " + codeValue);
-      
       setKeyPressed(null)
+      setTick(tick + 1)
     }, false);
   }, [])
   
@@ -33,7 +27,8 @@ const GameContextProvider = ({ children }) => {
       value={{
         setKeyPressed,
         keysPressed,
-        event
+        event,
+        tick
       }}
     >
       {children}

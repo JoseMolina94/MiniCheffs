@@ -4,11 +4,17 @@ import cheffImgRun from "../../assets/MiniCheffRun.gif";
 import {GameContext} from "../../contexts/GameContext";
 
 export const Cheff = props => {
+  const {
+    controls = {
+      left: 'KeyA',
+      right: 'KeyD'
+    }
+  } = props
   const [ position, setPosition ] = useState({})
   const [ direction, setDirection ] = useState('scaleX(1)')
   const [ currentStateAnimation, setCurrentStateAnimation ] = useState(cheffImg)
   const cheffRef = useRef(null)
-  const { keysPressed, event } = useContext(GameContext)
+  const { keysPressed, event, tick } = useContext(GameContext)
   
   useEffect(() => {
     setPosition({
@@ -21,18 +27,18 @@ export const Cheff = props => {
     if (cheffRef?.current) {
       if (keysPressed) {
         switch (keysPressed) {
-          case 'KeyD':
+          case controls.right:
             setPosition({
               bottom: 20,
-              left: position.left + 10
+              left: position.left + 20
             })
             setCurrentStateAnimation(cheffImgRun)
             setDirection('scaleX(1)')
             break;
-          case 'KeyA':
+          case controls.left:
             setPosition({
               bottom: 20,
-              left: position.left - 10,
+              left: position.left - 20,
             })
             setCurrentStateAnimation(cheffImgRun)
             setDirection('scaleX(-1)')
@@ -43,7 +49,7 @@ export const Cheff = props => {
         setCurrentStateAnimation(cheffImg)
       }
     }
-  }, [cheffRef, event, keysPressed])
+  }, [cheffRef, event, keysPressed, tick])
   
   return (
     <img
@@ -54,8 +60,7 @@ export const Cheff = props => {
         width: '128px',
         height: '128px',
         position: 'absolute',
-        bottom: position?.bottom,
-        left: position?.left,
+        ...position,
         zIndex: 1,
         transform: direction
       }}
